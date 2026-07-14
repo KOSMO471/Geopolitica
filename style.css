@@ -1,0 +1,1137 @@
+/* ==========================================================================
+   GEOPOLITICA - PREMIUM ULTIMATE TACTICAL COMMAND CYBER THEME (REWRITTEN)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght=500;600;700;800&family=Share+Tech+Mono&display=swap');
+
+:root {
+    /* Tasarım Sistemi Renk Değişkenleri */
+    --bg-main: #02050d;
+    --bg-terminal: #040814;
+    --bg-panel: rgba(6, 12, 28, 0.88);
+    --bg-panel-light: rgba(16, 32, 64, 0.45);
+    
+    /* Taktiksel Kenarlıklar ve Neon Gölgeler */
+    --border-color: #122846;
+    --border-glow: rgba(0, 229, 255, 0.25);
+    --border-glow-active: rgba(0, 229, 255, 0.6);
+    
+    /* Siber Savaş Renk Paleti */
+    --accent-blue: #00e5ff;
+    --accent-blue-hover: #6afff3;
+    --accent-blue-dim: rgba(0, 229, 255, 0.1);
+    --accent-orange: #ff9f43;
+    --accent-red: #ff4a5a;
+    --accent-green: #05ffc4;
+    --accent-purple: #c72cff;
+    
+    /* Yazı Tipi Renkleri */
+    --text-primary: #e1eaf5;
+    --text-muted: #627794;
+    --text-dark: #030712;
+    --text-bright: #ffffff;
+    
+    /* Font Seçimleri */
+    --font-sans: 'Rajdhani', -apple-system, sans-serif;
+    --font-mono: 'Share Tech Mono', monospace;
+    
+    /* Panel Genişlikleri */
+    --panel-left-width: 250px;
+    --panel-right-width: 285px;
+}
+
+/* ---- Global Sıfırlama ve Temel Kurallar ---- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+    position: relative;
+}
+
+/* Global HUD Arka Plan Izgarası */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: 
+        linear-gradient(rgba(0, 229, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 229, 255, 0.015) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* ---- Özelleştirilmiş Taktiksel Kaydırma Çubukları (Scrollbar) ---- */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-terminal);
+    border-left: 1px solid var(--border-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-blue);
+    box-shadow: 0 0 10px var(--accent-blue);
+}
+
+/* ==========================================================================
+   1. BAŞLANGIÇ EKRANI (MAIN MENU & SETUP)
+   ========================================================================== */
+
+#start-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, #07122a 0%, #010309 100%);
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    overflow: hidden;
+}
+
+/* Siber Tarayıcı Çizgisi Animasyonu */
+#start-screen::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 3px;
+    background: linear-gradient(180deg, rgba(0, 229, 255, 0.35), transparent);
+    animation: sweepLine 6s linear infinite;
+    pointer-events: none;
+    z-index: 1;
+}
+
+@keyframes sweepLine {
+    0% { transform: translateY(-5vh); }
+    100% { transform: translateY(105vh); }
+}
+
+.setup-container {
+    background: var(--bg-panel);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 45px;
+    max-width: 980px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 
+        0 20px 50px rgba(0, 0, 0, 0.9),
+        0 0 40px rgba(0, 229, 255, 0.05),
+        inset 0 0 20px rgba(0, 229, 255, 0.05);
+    position: relative;
+    z-index: 2;
+}
+
+/* Taktiksel Köşe Parantezleri */
+.setup-container::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 16px; height: 16px;
+    border-top: 3px solid var(--accent-blue);
+    border-left: 3px solid var(--accent-blue);
+}
+
+.setup-container::after {
+    content: "";
+    position: absolute;
+    bottom: 0; right: 0; width: 16px; height: 16px;
+    border-bottom: 3px solid var(--accent-blue);
+    border-right: 3px solid var(--accent-blue);
+}
+
+/* Başlık & Alt Başlık Tasarımı */
+.setup-container h1 {
+    font-size: 52px;
+    font-weight: 800;
+    letter-spacing: 8px;
+    background: linear-gradient(135deg, #ffffff 20%, var(--accent-blue) 60%, var(--accent-orange) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 30px rgba(0, 229, 255, 0.3);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+}
+
+.setup-container .subtitle {
+    color: var(--accent-blue);
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    margin-bottom: 35px;
+    font-weight: 700;
+    font-family: var(--font-mono);
+}
+
+/* Fraksiyon Seçim Düzeni */
+.faction-selector {
+    display: flex;
+    gap: 30px;
+    margin: 30px 0;
+    flex-wrap: wrap;
+}
+
+.faction-selector > div {
+    flex: 1 1 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+.faction-selector h3 {
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    border-left: 4px solid currentColor;
+    padding-left: 10px;
+}
+
+.faction-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    max-height: 250px;
+    overflow-y: auto;
+    padding: 12px;
+    background: rgba(2, 5, 13, 0.75);
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+/* Fraksiyon Kartları (Dossier Tasarımı) */
+.faction-option {
+    padding: 14px;
+    background: rgba(18, 40, 70, 0.15);
+    border: 1px solid rgba(18, 40, 70, 0.5);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+}
+
+.faction-option:hover {
+    background: var(--accent-blue-dim);
+    border-color: var(--accent-blue);
+    color: var(--text-bright);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 229, 255, 0.15);
+}
+
+/* Seçili Fraksiyon */
+.faction-option.selected {
+    background: linear-gradient(135deg, rgba(0, 229, 255, 0.2), rgba(199, 44, 255, 0.15));
+    border-color: var(--accent-blue);
+    color: var(--text-bright);
+    box-shadow: 0 0 20px rgba(0, 229, 255, 0.3), inset 0 0 10px rgba(0, 229, 255, 0.1);
+    animation: selectPulse 2s infinite alternate;
+}
+
+@keyframes selectPulse {
+    0% { border-color: var(--accent-blue); box-shadow: 0 0 15px rgba(0, 229, 255, 0.2); }
+    100% { border-color: var(--accent-purple); box-shadow: 0 0 25px rgba(199, 44, 255, 0.35); }
+}
+
+/* Ana Menü Butonları */
+.start-btn {
+    padding: 14px 40px;
+    border: 1px solid transparent;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: #ffffff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+#btn-start-game {
+    background: linear-gradient(135deg, #1d976c, #238636);
+    border-color: #2ea44f;
+    box-shadow: 0 6px 20px rgba(35, 134, 54, 0.3);
+}
+
+#btn-start-game:hover:not(:disabled) {
+    background: linear-gradient(135deg, #2ea44f, #34d058);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(35, 134, 54, 0.5);
+}
+
+#btn-start-game:disabled {
+    background: #121824;
+    border: 1px solid #1c2635;
+    color: var(--text-muted);
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+.btn-group .start-btn:not(#btn-start-game) {
+    background: rgba(18, 25, 38, 0.8);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.btn-group .start-btn:not(#btn-start-game):hover {
+    background: rgba(30, 42, 64, 0.9);
+    border-color: var(--accent-blue-hover);
+    transform: translateY(-3px);
+}
+
+.btn-group {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
+
+/* Ana Menüdeki Satır İçi Renklerin Siber Temaya Uyum Sağlaması İçin Ezici Kurallar */
+#btn-play {
+    background: linear-gradient(135deg, #1d976c, #238636) !important;
+    border: 1px solid #34d058 !important;
+}
+#btn-play:hover {
+    box-shadow: 0 0 15px rgba(52, 208, 88, 0.4) !important;
+    transform: translateY(-2px);
+}
+
+#btn-tutorial {
+    background: linear-gradient(135deg, #1f6feb, #0969da) !important;
+    border: 1px solid var(--accent-blue) !important;
+}
+#btn-tutorial:hover {
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.4) !important;
+    transform: translateY(-2px);
+}
+
+#btn-settings {
+    background: rgba(30, 42, 64, 0.9) !important;
+    border: 1px solid var(--border-color) !important;
+}
+#btn-settings:hover {
+    border-color: var(--accent-blue-hover) !important;
+    transform: translateY(-2px);
+}
+
+#btn-quit {
+    background: linear-gradient(135deg, #ff4a5a, #da3637) !important;
+    border: 1px solid var(--accent-red) !important;
+}
+#btn-quit:hover {
+    box-shadow: 0 0 15px rgba(255, 74, 90, 0.4) !important;
+    transform: translateY(-2px);
+}
+
+
+/* ==========================================================================
+   2. ANA OYUN ARAYÜZÜ (MILITARY CONTROL INTERFACE)
+   ========================================================================== */
+
+#game-container {
+    display: none; /* JS ile dinamik açılır */
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    z-index: 2;
+}
+
+/* ---- Küresel Bildirim Ticker Ekranı ---- */
+#notification-ticker {
+    position: absolute;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 42%;
+    max-width: 700px;
+    max-height: 100px;
+    background: rgba(4, 8, 20, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--accent-blue);
+    border-radius: 6px;
+    z-index: 100;
+    padding: 10px 18px;
+    overflow-y: auto;
+    box-shadow: 
+        0 0 25px rgba(0, 229, 255, 0.15),
+        inset 0 0 15px rgba(0, 229, 255, 0.05);
+    scrollbar-width: none;
+}
+
+#notification-ticker::-webkit-scrollbar {
+    display: none;
+}
+
+.ticker-log {
+    padding: 6px 0;
+    border-bottom: 1px dashed rgba(0, 229, 255, 0.15);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    line-height: 1.5;
+    animation: tacticalFadeIn 0.3s ease;
+}
+
+.ticker-log:last-child {
+    border-bottom: none;
+}
+
+/* ---- Stratejik Harita (Canvas Wrapper) ---- */
+#canvas-wrapper {
+    position: absolute;
+    top: 0;
+    left: var(--panel-left-width);
+    right: var(--panel-right-width);
+    height: 100%;
+    background: #01040a;
+    overflow: hidden;
+    z-index: 1;
+}
+
+#geoMap {
+    width: 100%;
+    height: 100%;
+    display: block;
+    cursor: crosshair;
+}
+
+/* ---- Ortak HUD Panel Kuralları ---- */
+.ui-panel {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    background: var(--bg-panel);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Sol Yönetim Paneli */
+.ui-panel-left {
+    left: 0;
+    width: var(--panel-left-width);
+    border-right: 1px solid var(--border-color);
+}
+
+/* Sağ Bilgi & Seçim Paneli */
+#right-ui-panel {
+    right: 0;
+    width: var(--panel-right-width);
+    border-left: 1px solid var(--border-color);
+}
+
+.panel-header {
+    padding: 16px 18px;
+    background: linear-gradient(90deg, rgba(8, 16, 36, 0.95) 0%, rgba(4, 8, 18, 0.95) 100%);
+    border-bottom: 1px solid var(--border-color);
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: var(--accent-blue);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-transform: uppercase;
+}
+
+.panel-header span:last-child {
+    background: rgba(0, 229, 255, 0.1);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    border: 1px solid rgba(0, 229, 255, 0.3);
+    color: #ffffff;
+    letter-spacing: 1px;
+}
+
+.panel-body {
+    padding: 14px;
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* ==========================================================================
+   3. PANEL BİLEŞENLERİ & GÖSTERGELER
+   ========================================================================== */
+
+/* Kaynak Paneli (Resource Bar Dashboard) */
+.resource-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    background: rgba(2, 5, 13, 0.7);
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+}
+
+.res-box {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 700;
+    text-transform: uppercase;
+    text-align: center;
+    background: var(--bg-panel-light);
+    padding: 6px 4px;
+    border-radius: 4px;
+    border: 1px solid rgba(18, 40, 70, 0.4);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.res-val {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: #ffffff;
+    display: block;
+    font-size: 13px;
+    margin-top: 3px;
+}
+
+/* Özelleştirilmiş Kaynak Değerleri */
+#res-money { color: var(--accent-green); text-shadow: 0 0 6px rgba(5, 255, 196, 0.3); }
+#res-arms { color: var(--accent-orange); text-shadow: 0 0 6px rgba(255, 159, 67, 0.3); }
+#res-oil { color: #ffd700; text-shadow: 0 0 6px rgba(255, 215, 0, 0.3); }
+#res-steel { color: #b0c4de; text-shadow: 0 0 6px rgba(176, 196, 222, 0.3); }
+#res-fighters { color: var(--accent-blue); text-shadow: 0 0 6px rgba(0, 229, 255, 0.3); }
+#res-food { color: #a4fc12; text-shadow: 0 0 6px rgba(164, 252, 18, 0.3); }
+
+/* Kontrol Grupları Podları (Control Group Matrix) */
+.control-group {
+    background: var(--bg-panel-light);
+    border: 1px solid rgba(18, 40, 70, 0.6);
+    border-radius: 8px;
+    padding: 12px;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.control-group::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 4px; height: 100%;
+    background: transparent;
+    transition: background 0.2s ease;
+}
+
+.control-group:hover {
+    border-color: rgba(0, 229, 255, 0.4);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+.control-group:hover::before {
+    background: var(--accent-blue);
+}
+
+.control-group h4 {
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(18, 40, 70, 0.6);
+    padding-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Buton Sıraları Izgarası */
+.btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 6px;
+}
+
+.btn-row button {
+    flex: 1 0 calc(33.33% - 6px);
+    min-width: 60px;
+    padding: 7px 4px;
+    font-size: 10px;
+    font-weight: 700;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+    background: rgba(14, 28, 54, 0.7);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    text-align: center;
+    font-family: var(--font-sans);
+}
+
+.btn-row button:hover {
+    background: var(--accent-blue);
+    color: var(--text-dark);
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 12px rgba(0, 229, 255, 0.4);
+    transform: translateY(-1px);
+}
+
+/* Tehlike / Saldırı Butonları */
+.btn-row button.btn-danger {
+    background: rgba(255, 74, 90, 0.1);
+    border-color: var(--accent-red);
+    color: var(--accent-red);
+}
+
+.btn-row button.btn-danger:hover {
+    background: var(--accent-red);
+    color: #ffffff;
+    box-shadow: 0 0 12px var(--accent-red);
+}
+
+/* İkincil / Destek Butonları */
+.btn-row button.btn-secondary {
+    background: rgba(98, 119, 148, 0.1);
+    border-color: var(--text-muted);
+    color: var(--text-primary);
+}
+
+.btn-row button.btn-secondary:hover {
+    background: var(--text-muted);
+    color: var(--text-dark);
+    box-shadow: 0 0 12px var(--text-muted);
+}
+
+/* Standart Blok Butonları */
+button:not(.btn-row button):not(.start-btn) {
+    width: 100%;
+    padding: 10px 14px;
+    background: linear-gradient(135deg, #1d976c, #2ea44f);
+    border: 1px solid #34d058;
+    border-radius: 6px;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 8px;
+}
+
+button:not(.btn-row button):not(.start-btn):hover {
+    background: linear-gradient(135deg, #2ea44f, #34d058);
+    box-shadow: 0 0 15px rgba(52, 208, 88, 0.4);
+    transform: translateY(-1px);
+}
+
+button:not(.btn-row button):not(.start-btn).btn-danger {
+    background: linear-gradient(135deg, #ff4a5a, #c31432);
+    border-color: var(--accent-red);
+}
+
+button:not(.btn-row button):not(.start-btn).btn-danger:hover {
+    background: linear-gradient(135deg, #ff6b7a, #ff4a5a);
+    box-shadow: 0 0 15px rgba(255, 74, 90, 0.4);
+}
+
+button:not(.btn-row button):not(.start-btn).btn-secondary {
+    background: rgba(33, 38, 45, 0.8);
+    border-color: var(--border-color);
+    color: var(--text-primary);
+}
+
+button:not(.btn-row button):not(.start-btn).btn-secondary:hover {
+    background: rgba(98, 119, 148, 0.2);
+    border-color: var(--accent-blue);
+}
+
+/* Form Kontrolleri (Inputs & Selects) */
+label {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: block;
+    margin: 12px 0 4px;
+}
+
+select,
+input[type="number"] {
+    width: 100%;
+    padding: 8px 12px;
+    background: var(--bg-terminal);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    transition: all 0.2s ease;
+}
+
+select:focus,
+input:focus {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
+    outline: none;
+}
+
+/* Bilgi Detay Satırları */
+.info-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 2px;
+    border-bottom: 1px solid rgba(18, 40, 70, 0.3);
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.info-line:last-child {
+    border-bottom: none;
+}
+
+.info-line span:first-child {
+    color: var(--text-muted);
+    text-transform: uppercase;
+    font-size: 10px;
+}
+
+.info-line span:last-child {
+    font-weight: 700;
+    color: var(--text-bright);
+    font-family: var(--font-mono);
+}
+
+/* ==========================================================================
+   4. TEKNOLOJİ AĞACI (RESEARCH GRID)
+   ========================================================================== */
+
+.tech-tree-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.tech-item {
+    background: rgba(3, 7, 17, 0.85);
+    border: 1px solid rgba(18, 40, 70, 0.8);
+    border-radius: 6px;
+    padding: 10px 6px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.25, 0.8, 0.25, 1);
+    opacity: 0.4; /* Kilitli Durumu */
+}
+
+.tech-item:hover {
+    border-color: var(--text-muted);
+    background: rgba(18, 40, 70, 0.2);
+}
+
+/* Açılmış Teknoloji */
+.tech-item.unlocked {
+    opacity: 1;
+    border-color: var(--accent-blue);
+    background: rgba(0, 229, 255, 0.05);
+    box-shadow: inset 0 0 10px rgba(0, 229, 255, 0.08);
+}
+
+.tech-item.unlocked:hover {
+    background: linear-gradient(135deg, rgba(0, 229, 255, 0.15), rgba(4, 8, 20, 0.8));
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.25);
+    transform: translateY(-2px);
+}
+
+.tech-item .tech-icon {
+    font-size: 18px;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.tech-item .tech-name {
+    font-weight: 700;
+    font-size: 11px;
+    display: block;
+    color: #ffffff;
+    letter-spacing: 0.5px;
+}
+
+.tech-item .tech-cost {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--accent-orange);
+    display: block;
+    margin-top: 4px;
+}
+
+/* ==========================================================================
+   5. DİPLOMASİ & BARIŞ BAROMETRESİ
+   ========================================================================== */
+
+#diplomacy-panel {
+    border-left: 3px solid var(--accent-blue);
+}
+
+.barometer {
+    height: 8px;
+    background: var(--bg-terminal);
+    border-radius: 4px;
+    margin: 10px 0;
+    overflow: hidden;
+    border: 1px solid rgba(18, 40, 70, 0.6);
+}
+
+.barometer-fill {
+    height: 100%;
+    width: 50%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--accent-red) 0%, var(--accent-blue) 50%, var(--accent-green) 100%);
+    background-size: 20px 20px;
+    transition: width 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* ==========================================================================
+   6. VERİ LİSTELERİ VE TAKTİKSEL ETİKETLER
+   ========================================================================== */
+
+#army-ledger-list,
+#air-unit-list,
+#space-info,
+#guerrilla-info,
+#war-report,
+#trade-route-list,
+#lobby-players {
+    background: rgba(2, 5, 13, 0.8);
+    border-radius: 6px;
+    padding: 8px;
+    max-height: 115px;
+    overflow-y: auto;
+    border: 1px solid rgba(18, 40, 70, 0.6);
+}
+
+#army-ledger-list div {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 5px 4px;
+    border-bottom: 1px solid rgba(18, 40, 70, 0.3);
+    color: var(--text-primary);
+}
+
+#army-ledger-list div:last-child {
+    border-bottom: none;
+}
+
+/* Sis Savaşı / Durum Etiketleri */
+.fog-indicator {
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--accent-blue);
+    padding: 3px 8px;
+    background: rgba(0, 229, 255, 0.1);
+    border-radius: 4px;
+    display: inline-block;
+    border: 1px solid var(--accent-blue);
+    text-transform: uppercase;
+    font-family: var(--font-mono);
+    letter-spacing: 0.5px;
+}
+
+/* Çok Oyunculu Lobi Aktif Paneli */
+#online-lobby {
+    background: rgba(6, 17, 38, 0.9);
+    border: 1px solid var(--accent-blue-hover);
+    box-shadow: inset 0 0 12px rgba(0, 229, 255, 0.15);
+}
+
+
+/* ==========================================================================
+   7. MODAL EKSTERAL STİLLERİ (HTML'DEKİ SATIR İÇİ ESKİ STİLLERİ SIFIRLAMA)
+   ========================================================================== */
+
+/* Ayarlar & Öğretici Modalı Kapsayıcıları */
+#settings-modal, 
+#tutorial-modal {
+    background: rgba(2, 5, 13, 0.85) !important;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+/* Modal İçerik Kutuları */
+#settings-modal > div, 
+#tutorial-modal > div {
+    background: var(--bg-panel) !important;
+    border: 1px solid var(--border-color) !important;
+    box-shadow: 0 0 35px rgba(0, 229, 255, 0.2) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Modal Başlıkları */
+#settings-modal h2, 
+#tutorial-modal h2 {
+    color: var(--accent-blue) !important;
+    text-shadow: 0 0 10px rgba(0, 229, 255, 0.3);
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* Modal Select, Input ve Buton Elemanları */
+#settings-modal select, 
+#settings-modal input[type="range"] {
+    background: var(--bg-terminal) !important;
+    border: 1px solid var(--border-color) !important;
+    color: var(--text-bright) !important;
+    border-radius: 6px;
+}
+
+#settings-modal label {
+    color: var(--accent-blue) !important;
+}
+
+/* Modal Butonları Siber Savaş Teması */
+#settings-reset {
+    background: linear-gradient(135deg, #ff4a5a, #da3637) !important;
+    border: 1px solid var(--accent-red) !important;
+}
+#settings-reset:hover {
+    box-shadow: 0 0 12px rgba(255, 74, 90, 0.4);
+}
+
+#settings-cancel {
+    background: rgba(30, 42, 64, 0.9) !important;
+    border: 1px solid var(--border-color) !important;
+}
+#settings-cancel:hover {
+    border-color: var(--accent-blue) !important;
+}
+
+#settings-save {
+    background: linear-gradient(135deg, #1d976c, #238636) !important;
+    border: 1px solid #34d058 !important;
+}
+#settings-save:hover {
+    box-shadow: 0 0 12px rgba(52, 208, 88, 0.4);
+}
+
+#tutorial-close {
+    background: linear-gradient(135deg, #1f6feb, #0969da) !important;
+    border: 1px solid var(--accent-blue) !important;
+}
+#tutorial-close:hover {
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+}
+
+
+/* ==========================================================================
+   8. ANİMASYONLAR VE TAKTİKSEL EFEKTLER
+   ========================================================================== */
+
+@keyframes tacticalFadeIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseBorder {
+    from { border-color: var(--border-color); box-shadow: 0 0 10px rgba(0, 229, 255, 0.1); }
+    to { border-color: var(--accent-blue); box-shadow: 0 0 20px rgba(0, 229, 255, 0.3); }
+}
+
+
+/* ==========================================================================
+   9. RESPONSIVE / ADAPTİF DÜZENLEMELER
+   ========================================================================== */
+
+@media (max-width: 1100px) {
+    :root {
+        --panel-left-width: 215px;
+        --panel-right-width: 245px;
+    }
+    .resource-bar { grid-template-columns: repeat(2, 1fr); }
+    .btn-row button { flex: 1 0 calc(50% - 6px); }
+}
+
+@media (max-width: 800px) {
+    body { overflow-y: auto; height: auto; }
+    
+    #game-container {
+        display: flex;
+        flex-direction: column;
+        height: auto;
+        overflow: visible;
+    }
+    
+    .ui-panel {
+        position: relative;
+        width: 100% !important;
+        height: auto;
+        top: 0; left: 0; right: 0;
+        border: none;
+        border-bottom: 2px solid var(--border-color);
+    }
+    
+    #canvas-wrapper {
+        position: relative;
+        width: 100%;
+        height: 60vh;
+        left: 0; right: 0;
+    }
+    
+    #notification-ticker {
+        width: 90%;
+        top: 8px;
+    }
+    
+    .faction-grid {
+        grid-template-columns: 1fr;
+    }
+}
+/* ==========================================================================
+   TEMA SEÇENEKLERİ (AÇIK & RADAR MODLARI GÜNCELLEMESİ)
+   ========================================================================== */
+
+/* --- 1. KOYU TEMA --- */
+body.dark {
+    /* Varsayılan :root renkleri aynen geçerlidir */
+}
+
+/* --- 2. AÇIK TEMA (Light Mode) --- */
+body.light {
+    --bg-main: #f0f4f8;
+    --bg-terminal: #e2e8f0;
+    --bg-panel: rgba(255, 255, 255, 0.94);
+    --bg-panel-light: rgba(203, 213, 225, 0.5);
+    
+    --border-color: #94a3b8;
+    --border-glow: rgba(0, 102, 204, 0.15);
+    --border-glow-active: rgba(0, 102, 204, 0.4);
+    
+    --accent-blue: #0066cc;
+    --accent-blue-hover: #004499;
+    --accent-blue-dim: rgba(0, 102, 204, 0.1);
+    --accent-orange: #d97706;
+    --accent-red: #dc2626;
+    --accent-green: #16a34a;
+    --accent-purple: #9333ea;
+    
+    --text-primary: #1e293b;
+    --text-muted: #64748b;
+    --text-dark: #ffffff;
+    --text-bright: #0f172a;
+}
+
+/* Açık Tema için Özel Arka Plan ve Sert Renk İstisnaları */
+body.light #start-screen {
+    background: radial-gradient(circle at center, #ffffff 0%, #cbd5e1 100%);
+}
+body.light .setup-container h1 {
+    background: linear-gradient(135deg, #0f172a 20%, var(--accent-blue) 60%, var(--accent-orange) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+body.light #canvas-wrapper {
+    background: #f8fafc;
+}
+body.light .faction-grid,
+body.light .resource-bar,
+body.light #army-ledger-list {
+    background: rgba(241, 245, 249, 0.9);
+}
+
+/* --- 3. RADAR TEMASI (Klasik Monokrom Siyah-Yeşil Taktik Ekran) --- */
+body.radar {
+    --bg-main: #000000;
+    --bg-terminal: #030803;
+    --bg-panel: rgba(4, 15, 4, 0.94);
+    --bg-panel-light: rgba(6, 24, 6, 0.45);
+    
+    --border-color: #00ff00;
+    --border-glow: rgba(0, 255, 0, 0.25);
+    --border-glow-active: rgba(0, 255, 0, 0.6);
+    
+    --accent-blue: #00ff00; /* Radarda mavi yerine yeşil hakimdir */
+    --accent-blue-hover: #a3ffa3;
+    --accent-blue-dim: rgba(0, 255, 0, 0.15);
+    --accent-orange: #ffb000; /* Kehribar/Amber rengi */
+    --accent-red: #ff3333;
+    --accent-green: #00ff00;
+    --accent-purple: #adff2f;
+    
+    --text-primary: #00ff00;
+    --text-muted: #006600;
+    --text-dark: #000000;
+    --text-bright: #cbffcb;
+}
+
+/* Radar Teması için Özel Arka Plan ve İndikatör İstisnaları */
+body.radar #start-screen {
+    background: #000000;
+}
+body.radar .setup-container h1 {
+    background: linear-gradient(135deg, #00ff00 0%, #00aa00 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+body.radar #canvas-wrapper {
+    background: #000200;
+}
+body.radar #notification-ticker {
+    background: rgba(0, 5, 0, 0.95);
+}
+body.radar .faction-grid,
+body.radar .resource-bar,
+body.radar #army-ledger-list {
+    background: rgba(0, 5, 0, 0.85);
+}

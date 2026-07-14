@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GEOPOLITICA - Avrupa & Asya</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- BAŞLANGIÇ EKRANI -->
+    <div id="start-screen">
+        <div class="setup-container">
+            <h1>GEOPOLITICA</h1>
+            <p class="subtitle">Avrupa &amp; Asya - Gerçek Zamanlı Strateji</p>
+            <div class="faction-selector">
+                <div>
+                    <h3 style="color:#ff9f43;">🌐 Ülkeler</h3>
+                    <div id="country-select-list" class="faction-grid"></div>
+                </div>
+                <div>
+                    <h3 style="color:#f85149;">⚡ Örgütler</h3>
+                    <div id="org-select-list" class="faction-grid"></div>
+                </div>
+            </div>
+            <div class="main-menu-buttons" style="display:flex; gap:12px; justify-content:center; margin-top:20px; flex-wrap:wrap;">
+                <button id="btn-play" class="start-btn" style="background:#238636;">▶ Oyna</button>
+                <button id="btn-tutorial" class="start-btn" style="background:#1f6feb;">📖 Öğretici</button>
+                <button id="btn-settings" class="start-btn" style="background:#2d3748;">⚙ Ayarlar</button>
+                <button id="btn-quit" class="start-btn" style="background:#da3637;">✖ Çıkış</button>
+            </div>
+            <p style="font-size:11px; color:#8b949e; margin-top:12px;">Otomatik kayıt her 30 saniyede</p>
+        </div>
+    </div>
+
+    <!-- AYARLAR MODALI -->
+<div id="settings-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center;">
+    <div style="background:#0d1117; border:1px solid #30363d; border-radius:12px; padding:30px; max-width:600px; width:90%; max-height:80vh; overflow-y:auto;">
+        <h2 style="color:#58a6ff;">⚙ Ayarlar</h2>
+        <div style="margin:20px 0;">
+            <label style="display:block; margin:10px 0 4px;">🔊 Ses Seviyesi</label>
+            <input type="range" id="settings-volume" min="0" max="100" value="80" style="width:100%;">
+            
+            <label style="display:block; margin:10px 0 4px;">🎨 Tema</label>
+            <select id="settings-theme" style="width:100%; padding:8px;">
+                <option value="dark">Karanlık</option>
+                <option value="light">Aydınlık</option>
+            </select>
+
+            <label style="display:block; margin:10px 0 4px;">📨 Mesaj Filtresi</label>
+            <select id="settings-msgfilter" style="width:100%; padding:8px;">
+                <option value="all">Tüm ülkeler</option>
+                <option value="allies">Müttefikler ve ben</option>
+                <option value="self">Yalnızca ben</option>
+            </select>
+
+            <div style="display:flex; gap:12px; margin-top:20px; justify-content:flex-end;">
+                <button id="settings-reset" style="background:#da3637; padding:8px 20px; border:none; border-radius:6px; color:#fff;">Sıfırla</button>
+                <button id="settings-cancel" style="background:#30363d; padding:8px 20px; border:none; border-radius:6px; color:#fff;">İptal</button>
+                <button id="settings-save" style="background:#238636; padding:8px 20px; border:none; border-radius:6px; color:#fff;">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- OYUN ARAYÜZÜ -->
+    <div id="game-container">
+        <!-- Bildirim Ticker -->
+        <div id="notification-ticker">
+            <div class="ticker-log" style="color:#58a6ff;">🛰️ Komuta merkezi aktif.</div>
+        </div>
+
+        <!-- SOL PANEL -->
+        <div class="ui-panel ui-panel-left" id="left-ui-panel">
+            <div class="panel-header"><span id="current-faction">Devlet</span><span>YÖNETİM</span></div>
+            <div class="panel-body">
+                <!-- Kaynaklar -->
+                <div class="resource-bar">
+                    <div class="res-box">Para<span id="res-money" class="res-val">0</span></div>
+                    <div class="res-box">silah<span id="res-arms" class="res-val">0</span></div>
+                    <div class="res-box">petrol<span id="res-oil" class="res-val">0</span></div>
+                    <div class="res-box">çelik<span id="res-steel" class="res-val">0</span></div>
+                    <div class="res-box">Hav.Aracı<span id="res-fighters" class="res-val">0</span></div>
+                    <div class="res-box">yemek<span id="res-food" class="res-val">0</span></div>
+                    <div class="res-box">elektrik<span id="res-charge" class="res-val">0</span></div>
+
+                </div>
+
+                <div class="btn-group">
+                    <button class="start-btn" onclick="exportSave()">📤 JSON Dışa Aktar</button>
+                    <button class="start-btn" onclick="importSave()">📥 JSON İçe Aktar</button>
+                </div>
+
+                <!-- İnşaat -->
+                <div class="control-group">
+                    <h4>Kaynak Toplama</h4>
+                    <div class="btn-row">
+                        <button onclick="buildFactory('steel')">Çelik</button>
+                        <button onclick="buildRefinery()">Rafineri</button>
+                        <button onclick="buildPort()">Liman</button>
+                        <button onclick="buildRadar()">📡 Radar</button>
+                    </div>
+                </div>
+
+                <!-- Askeri -->
+                <div class="control-group">
+                    <h4>⚔️ Askeri</h4>
+                    <h5>Kara Birlikleri</h5>
+                    <div class="btn-row">
+                        <label>Asker sayısı</label>
+                        <input type="number" id="recruit-amount" value="2000" min="500" step="500" style="width:80px; display:inline-block;">
+                        <button onclick="recruitTroops()">Ordu Kur</button>
+                        <button onclick="buildAsset('tank')">Tank</button>
+                        <button onclick="buildAsset('artillery')">Topçu</button>
+                        <button onclick="buildAsset('commando')">Komando</button>
+                        <button onclick="orderMove('LAND')" class="btn-secondary">🚀 Kara</button>
+                        <label>Gönderilecek Ordu:</label>
+                        <select id="army-select"></select>
+                    </div>
+                    <h5>Deniz Birlikleri</h5>
+                    <div class="btn-now">
+                        <button onclick="buildNavalBase()">⚓ Deniz Üssü</button>
+                        <button onclick="orderMove('FLEET')" class="btn-secondary">⚓ Donanma</button>
+                        <button onclick="buildAsset('warship')">Fırkateyn</button>
+                        <button onclick="buildAsset('sub')">Denizaltı</button>
+                        <button onclick="buildAsset('marine')">Deniz Piyadesi</button>
+                    </div>
+                    <h5>Hava birlikleri</h5>
+                    <div class="btn-row">
+                        <button onclick="buildAsset('plane')">Uçak Üret</button>
+                        <button onclick="buildAsset('drone')">İHA</button>
+                        <button onclick="launchBomber()" class="btn-danger">Bombala</button>
+                        <button onclick="launchScout()" class="btn-secondary">Keşif Uçuşu</button>
+                        <button onclick="buildAirDefense()">Hava Sav.</button>
+                    </div>
+                    <h5>İstihbarat</h5>
+                    <div class="btn-row">
+                        <button onclick="sabotageNode()" class="btn-danger">💣 Sabotaj</button>
+                        <button onclick="blockadePort()" class="btn-secondary">⛔ Abluka</button>
+                        <button onclick="deploySpy()" class="btn-secondary">🕵️ Casus Gönder</button>
+                        <button onclick="startGuerrilla()">🎯 Gerilla Savaşı</button>
+                    </div>
+                    <h5>Uzay Teknolojileri</h5>
+                    <div class="btn-row">
+                        <button onclick="buildSpaceStation()">🚀 Uzay Üssü</button>
+                        <button onclick="buildMissileDefense()">🛡️ Füze Savunma</button>
+                        <button onclick="launchSatellite()" class="btn-secondary">🛰️ Uydu Fırlat</button>
+                    </div>
+                    
+                </div>
+
+                <!-- Ticaret & Ambargo -->
+                <div class="control-group">
+                    <h4>📦 Ticaret & Ambargo</h4>
+                    <div class="btn-row">
+                        <button onclick="tradeMarket('BUY_ARMS')">Silah Al</button>
+                        <button onclick="tradeMarket('SELL_ARMS')">Silah Sat</button>
+                        <button onclick="tradeMarket('BUY_OIL')">Petrol Al</button>
+                        <button onclick="tradeMarket('SELL_OIL')">Petrol Sat</button>
+                        <button onclick="tradeMarket('BUY_FOOD')">Gıda Al</button>
+                        <button onclick="tradeMarket('SELL_FOOD')">Gıda Sat</button>
+                    </div>
+                    <label>Hedef Liman</label>
+                    <select id="trade-target-select"></select>
+                    <button onclick="launchManualTradeShip()" style="background:#cca43b; color:#0d1117;">🚢 Kargo Gönder</button>
+                    <label>Kargo Türü</label>
+                    <select id="cargo-type" style="width:100%; padding:6px;">
+                        <option value="oil">Petrol</option>
+                        <option value="food">Gıda</option>
+                        <option value="arms">Silah</option>
+                        <option value="steel">Çelik</option>
+                    </select>
+                    <label>Miktar</label>
+                    <input type="number" id="cargo-amount" value="10" min="1" style="width:80px; display:inline-block;">
+                    <button onclick="toggleEmbargo()" class="btn-secondary" style="margin-top:4px;">⛔ Ambargo Değiştir</button>
+                    <span id="embargo-status" style="font-size:9px; color:#8b949e;">Kapalı</span>
+                    <button onclick="imposeEconomicSanctions()" class="btn-danger" style="margin-top:4px;">🚫 Yaptırım Uygula</button>
+                    <span id="sanction-target" style="font-size:9px; color:#8b949e;">Hedef yok</span>
+                </div>
+
+                <!-- Teknoloji Ağacı -->
+                <div class="control-group">
+                    <h4>🔬 Teknoloji Ağacı</h4>
+                    <div class="tech-tree-grid" id="tech-tree-grid">
+                        <div class="tech-item unlocked" data-tech="land_speed" onclick="researchTechTree('land_speed')">
+                            <span class="tech-icon">🏃</span>
+                            <span class="tech-name">Kara Hız</span>
+                            <span class="tech-cost">400$</span>
+                        </div>
+                        <div class="tech-item" data-tech="naval_speed" onclick="researchTechTree('naval_speed')">
+                            <span class="tech-icon">⛵</span>
+                            <span class="tech-name">Deniz Hız</span>
+                            <span class="tech-cost">500$</span>
+                        </div>
+                        <div class="tech-item" data-tech="air_power" onclick="researchTechTree('air_power')">
+                            <span class="tech-icon">✈️</span>
+                            <span class="tech-name">Hava Gücü</span>
+                            <span class="tech-cost">600$</span>
+                        </div>
+                        <div class="tech-item" data-tech="refinery_eff" onclick="researchTechTree('refinery_eff')">
+                            <span class="tech-icon">🛢️</span>
+                            <span class="tech-name">Rafineri Verim</span>
+                            <span class="tech-cost">700$</span>
+                        </div>
+                        <div class="tech-item" data-tech="tank_tech" onclick="researchTechTree('tank_tech')">
+                            <span class="tech-icon">🎖️</span>
+                            <span class="tech-name">Tank Tek.</span>
+                            <span class="tech-cost">800$</span>
+                        </div>
+                        <div class="tech-item" data-tech="artillery_tech" onclick="researchTechTree('artillery_tech')">
+                            <span class="tech-icon">💥</span>
+                            <span class="tech-name">Topçu Tek.</span>
+                            <span class="tech-cost">800$</span>
+                        </div>
+                        <div class="tech-item" data-tech="spy_tech" onclick="researchTechTree('spy_tech')">
+                            <span class="tech-icon">🕵️</span>
+                            <span class="tech-name">Casusluk</span>
+                            <span class="tech-cost">500$</span>
+                        </div>
+                        <div class="tech-item" data-tech="space_tech" onclick="researchTechTree('space_tech')">
+                            <span class="tech-icon">🚀</span>
+                            <span class="tech-name">Uzay Tek.</span>
+                            <span class="tech-cost">1000$</span>
+                        </div>
+                    </div>
+                    <div id="techStatus" style="font-size:10px; color:#8b949e; margin-top:4px;">Araştırma: 0</div>
+                </div>
+
+                <!-- Diplomasi & Barış Antlaşmaları -->
+                <div class="control-group">
+                    <h4>🕊️ Diplomasi</h4>
+                    <div class="btn-row">
+                        <button onclick="negotiatePeace()" style="background:#1a7f37;">🤝 Barış Görüş</button>
+                        <button onclick="callUN()" style="background:#0969da;">🇺🇳 BM Çağır</button>
+                        <button onclick="dipAction('nonaggression')" style="background:#2d3748;">📜 Saldırmazlık</button>
+                        <button onclick="dipAction('vassal')" style="background:#b83280;">👑 Haraca Bağla</button>
+                        <button onclick="dipAction('alliance')" style="background:#0969da;">🤝 İttifak Kur</button>
+                        <button onclick="proposePeaceTreaty()" style="background:#1a7f37;">📄 Barış Antlaşması</button>
+                    </div>
+                </div>
+
+                <!-- Online Mod -->
+                <div class="control-group">
+                    <h4>🌐 Çok Oyunculu</h4>
+                    <button onclick="onlineLobby()" style="background:#0969da;">🕹️ Lobi'ye Katıl</button>
+                    <div id="online-status" style="font-size:9px; color:#8b949e;">Çevrimdışı</div>
+                </div>
+
+                <button onclick="saveGame()" style="background:#0969da; font-size:11px;">💾 Kaydet</button>
+                <button onclick="toggleSound()" style="background:#30363d; font-size:11px;">🔊 Ses</button>
+            </div>
+        </div>
+
+        <!-- HARİTA -->
+        <div id="canvas-wrapper">
+            <canvas id="geoMap" width="2000" height="1200"></canvas>
+        </div>
+
+        <!-- SAĞ PANEL -->
+        <div class="ui-panel" id="right-ui-panel">
+            <div class="panel-header"><span>📋 Bilgi</span><span>SEÇİM</span></div>
+            <div class="panel-body">
+                <!-- Şehir Detayı -->
+                <div class="control-group" style="background:rgba(28,33,42,0.7);">
+                    <h4 id="dst-name" style="color:#ff9f43;">Şehir seçilmedi</h4>
+                    <div class="info-line"><span>Nüfus:</span><span id="dst-pop">-</span></div>
+                    <div class="info-line"><span>Arazi:</span><span id="dst-terrain">-</span></div>
+                    <div class="info-line"><span>Sanayi:</span><span id="dst-industry">-</span></div>
+                    <div class="info-line"><span>Garnizon:</span><span id="dst-garrison">-</span></div>
+                    <div class="info-line"><span>Liman:</span><span id="dst-harbor">❌</span></div>
+                    <div class="info-line"><span>Rafineri:</span><span id="dst-refinery">❌</span></div>
+                    <div class="info-line"><span>Hava Sav.:</span><span id="dst-airdef">❌</span></div>
+                    <div class="info-line"><span>Radar:</span><span id="dst-radar">❌</span></div>
+                    <div class="info-line"><span>Deniz Üssü:</span><span id="dst-navalbase">❌</span></div>
+                    <div class="info-line"><span>Uzay Üssü:</span><span id="dst-spacebase">❌</span></div>
+                    <div class="info-line"><span>Füze Sav.:</span><span id="dst-missiledef">❌</span></div>
+                    <div class="info-line"><span>Petrol/tic:</span><span id="dst-oilprod">-</span></div>
+                    <div class="info-line"><span>Abluka:</span><span id="dst-blockade">❌</span></div>
+                    <div class="info-line"><span>Komşular:</span><span id="dst-neighbors">-</span></div>
+                </div>
+
+                <!-- Diplomasi Paneli -->
+                <div id="diplomacy-panel" class="control-group" style="display:none;">
+                    <h4 id="dip-title">Diplomasi</h4>
+                    <div class="info-line"><span>İlişki:</span><span id="dip-relation">-</span></div>
+                    <div class="info-line"><span>Puan:</span><span id="dip-score">0</span></div>
+                    <div class="barometer"><div class="barometer-fill" id="dip-bar" style="width:50%;background:#58a6ff;"></div></div>
+                    <div class="info-line"><span>İttifak:</span><span id="dip-access">-</span></div>
+                    <div class="btn-row">
+                        <button class="btn-danger" onclick="dipAction('war')">⚔️ Savaş</button>
+                        <button style="background:#0969da;" onclick="dipAction('alliance')">🤝 İttifak</button>
+                        <button style="background:#1a7f37;" onclick="dipAction('treaty')">📜 Ticaret</button>
+                        <button class="btn-secondary" onclick="dipAction('access')">🚪 Geçiş</button>
+                        <button class="btn-secondary" onclick="dipAction('peace')">🕊️ Barış</button>
+                        <button style="background:#2d3748;" onclick="dipAction('nonaggression')">📜 Saldırmazlık</button>
+                        <button style="background:#b83280;" onclick="dipAction('vassal')">👑 Haraca Bağla</button>
+                    </div>
+                </div>
+
+                <!-- Ordular -->
+                <div class="control-group">
+                    <h4>📋 Ordularım</h4>
+                    <div id="army-ledger-list"></div>
+                </div>
+
+                <!-- Hava Birlikleri -->
+                <div class="control-group">
+                    <h4>✈️ Hava Filosu</h4>
+                    <div id="air-unit-list" style="font-size:10px;color:#8b949e;">Uçak yok</div>
+                </div>
+
+                <!-- Uzay & Uydu -->
+                <div class="control-group">
+                    <h4>🛰️ Uzay</h4>
+                    <div id="space-info" style="font-size:10px;color:#8b949e;">Uydu yok</div>
+                </div>
+
+                <!-- Gerilla -->
+                <div class="control-group">
+                    <h4>🎯 Gerilla</h4>
+                    <div id="guerrilla-info" style="font-size:10px;color:#8b949e;">Aktif yok</div>
+                </div>
+
+                <!-- Savaş Raporu -->
+                <div class="control-group">
+                    <h4>📊 Savaş Raporu</h4>
+                    <div id="war-report" style="font-size:10px;color:#8b949e;">Hiç savaş yok</div>
+                </div>
+
+                <!-- Zafer -->
+                <div class="control-group">
+                    <h4>🏆 Zafer</h4>
+                    <p id="victory-status" style="color:#ffd700; font-size:12px;">Devam ediyor...</p>
+                    <p id="victory-detail" style="font-size:9px;color:#8b949e;"></p>
+                </div>
+
+                <!-- Ekonomi & İklim -->
+                <div class="control-group">
+                    <h4>📊 Ekonomi & İklim</h4>
+                    <div class="info-line"><span>Enflasyon:</span><span id="inflationDisplay">0%</span></div>
+                    <div class="info-line"><span>BM Yaptırım:</span><span id="sanctionDisplay">Yok</span></div>
+                    <div class="info-line"><span>Sis Savaşı:</span><span id="fogStatus">Aktif</span></div>
+                    <div class="info-line"><span>Küresel Olay:</span><span id="globalEventDisplay">Yok</span></div>
+                    <div class="info-line"><span>İklim Değişikliği:</span><span id="climateDisplay">Normal</span></div>
+                </div>
+
+                <!-- Ticaret Rotaları -->
+                <div class="control-group">
+                    <h4>🚢 Ticaret Rotaları</h4>
+                    <div id="trade-route-list" style="font-size:10px;color:#8b949e;">Aktif rota yok</div>
+                </div>
+
+                <!-- Online Lobi -->
+                <div class="control-group" id="online-lobby" style="display:none;">
+                    <h4>🕹️ Lobi</h4>
+                    <div id="lobby-players" style="font-size:10px;color:#8b949e;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="tutorial-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:9998; justify-content:center; align-items:center;">
+    <div style="background:#0d1117; border:1px solid #30363d; border-radius:12px; padding:30px; max-width:700px; width:90%; max-height:80vh; overflow-y:auto; color:#c9d1d9;">
+        <h2 style="color:#58a6ff;">📖 GEOPOLITICA Öğretici</h2>
+        <div id="tutorial-content" style="margin-top:15px; line-height:1.6; font-size:14px;"></div>
+        <button id="tutorial-close" style="margin-top:20px; background:#1f6feb; padding:8px 30px; border:none; border-radius:6px; color:#fff;">Kapat</button>
+    </div>
+</div>
+
+    <script src="script.js"></script>
+</body>
+</html>
